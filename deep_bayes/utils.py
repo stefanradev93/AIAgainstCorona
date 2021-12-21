@@ -46,7 +46,7 @@ def clip_gradients(gradients, clip_value=5., clip_method='norm'):
     return gradients
 
         
-def apply_gradients(optimizer, gradients, variables, global_step=None):
+def apply_gradients(optimizer, gradients, variables):
     """
     Performs one step of the backprop algorithm by updating each tensor in the 'variables' list.
     Note, that the opertaion is performed in-place.
@@ -63,4 +63,4 @@ def apply_gradients(optimizer, gradients, variables, global_step=None):
     ----------
     """
 
-    optimizer.apply_gradients(zip(gradients, variables), global_step=global_step)
+    optimizer.apply_gradients(zip(gradients, variables))

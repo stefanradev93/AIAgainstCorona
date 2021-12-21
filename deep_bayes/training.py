@@ -18,7 +18,7 @@ from .utils import clip_gradients, apply_gradients
 
 
 def train_online(model, optimizer, data_gen, loss_fun, iterations, batch_size, p_bar=None,
-                 clip_value=5., clip_method='global_norm', global_step=None, n_smooth=100, method='flow'):
+                 clip_value=5., clip_method='global_norm', n_smooth=100, method='flow'):
     """
     Performs a number of training iterations with a given tensorflow model and optimizer.
 
@@ -37,7 +37,6 @@ def train_online(model, optimizer, data_gen, loss_fun, iterations, batch_size, p
     p_bar           : ProgressBar or None -- an instance for tracking the training progress
     clip_value      : float       -- the value used for clipping the gradients
     clip_method     : str         -- the method used for clipping (default 'global_norm')
-    global_step     : tf.Variavle -- a scalar tensor tracking the number of steps and used for learning rate decay  
     ----------
 
     Returns:
@@ -89,7 +88,7 @@ def train_online(model, optimizer, data_gen, loss_fun, iterations, batch_size, p
         gradients = tape.gradient(total_loss, model.trainable_variables)
         if clip_value is not None:
             gradients = clip_gradients(gradients, clip_value, clip_method)
-        apply_gradients(optimizer, gradients, model.trainable_variables, global_step)  
+        apply_gradients(optimizer, gradients, model.trainable_variables)  
 
         # Store losses
         losses['regularization'].append(w_decay)
@@ -309,7 +308,7 @@ def train_online_softmax(model, optimizer, data_gen, iterations, batch_size, p_b
 
 
 def train_offline(model, optimizer, dataset, loss_fun, batch_size, p_bar=None, clip_value=5., 
-                  clip_method='global_norm', global_step=None, method='flow'):
+                  clip_method='global_norm', method='flow'):
     """
     Loops throuhg a dataset  #TODO 
     ----------
@@ -367,7 +366,7 @@ def train_offline(model, optimizer, dataset, loss_fun, batch_size, p_bar=None, c
         gradients = tape.gradient(total_loss, model.trainable_variables)
         if clip_value is not None:
             gradients = clip_gradients(gradients, clip_value, clip_method)
-        apply_gradients(optimizer, gradients, model.trainable_variables, global_step)  
+        apply_gradients(optimizer, gradients, model.trainable_variables)  
 
         # Store losses
         losses['regularization'].append(w_decay)
